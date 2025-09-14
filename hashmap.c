@@ -43,8 +43,8 @@ void insertMap(HashMap * mapa, char * clave, void * valor) {
     if (mapa == NULL || clave == NULL) return;
 
     // agrandar si al insertar se supera 0.7 
-    if ((double)(mapa->size + 1) / (double)mapa->capacity > 0.7)
-        enlarge(mapa);
+    if ( (mapa->size + 1) * 10 > mapa->capacity * 7 )
+    enlarge(mapa);
 
     long indice = hash(clave, mapa->capacity);
     long primer_borrado = -1;
