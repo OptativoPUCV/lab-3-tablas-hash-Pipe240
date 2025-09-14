@@ -39,10 +39,38 @@ int is_equal(void* key1, void* key2){
 }
 
 
-void insertMap(HashMap * map, char * key, void * value) {
+void insertMap(HashMap * mapa, char * clave, void * valor) {
+    if (mapa == NULL || clave == NULL) return;
 
+    // agrandar si al insertar se supera 0.7 
+    if ((double)(mapa->size + 1) / (double)mapa->capacity > 0.7)
+        enlarge(mapa);
 
+    long indice = hash(clave, mapa->capacity);
+    long primer_borrado = -1;
+
+    while (1) {
+        Pair *casilla = mapa->buckets[indice];
+
+        if (casilla == NULL) {
+            long destino = (primer_borrado != -1) ? primer_borrado : indice;
+            mapa->buckets[destino] = createPair(clave, valor);
+            mapa->current = destino;
+            mapa->size++;
+            return;
+        }
+
+        if (casilla->key == NULL) {
+            if (primer_borrado == -1) primer_borrado = indice;
+        } else if (is_equal(casilla->key, clave)) {
+            mapa->current = indice; // clave duplicada: no insertar 
+            return;
+        }
+
+        indice = (indice + 1) % mapa->capacity; // sondeo lineal circular 
+    }
 }
+
 
 void enlarge(HashMap * map) {
     enlarge_called = 1; //no borrar (testing purposes)
@@ -51,25 +79,22 @@ void enlarge(HashMap * map) {
 }
 
 
-HashMap * createMap(long capacity) {
-    // reservar la estructura
-    HashMap *map = (HashMap *) malloc(sizeof(HashMap));
-    if (map == NULL) return NULL;
+HashMap * createMap(long capacidad) {
+    HashMap *mapa = (HashMap *) malloc(sizeof(HashMap));
+    if (mapa == NULL) return NULL;
 
-    // crear arreglo de buckets inicializado en NULL
-    map->buckets = (Pair **) calloc(capacity, sizeof(Pair *));
-    if (map->buckets == NULL) {
-        free(map);
+    mapa->buckets = (Pair **) calloc(capacidad, sizeof(Pair *));
+    if (mapa->buckets == NULL) {
+        free(mapa);
         return NULL;
     }
 
-    // variables iniciales
-    map->size = 0;
-    map->capacity = capacity;
-    map->current = -1;
-
-    return map;
+    mapa->size = 0;
+    mapa->capacity = capacidad;
+    mapa->current = -1;
+    return mapa;
 }
+
 
 void eraseMap(HashMap * map,  char * key) {    
 
