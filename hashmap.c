@@ -101,11 +101,34 @@ void eraseMap(HashMap * map,  char * key) {
 
 }
 
-Pair * searchMap(HashMap * map,  char * key) {   
+Pair * searchMap(HashMap * mapa, char * clave) {
+    if (mapa == NULL || clave == NULL) return NULL;
 
+    long indice = hash(clave, mapa->capacity);
+    long inicio = indice;
 
-    return NULL;
+    while (1) {
+        Pair *casilla = mapa->buckets[indice];
+
+        if (casilla == NULL) {
+            // al encontrar NULL sabemos que la clave no está (corta la búsqueda) 
+            return NULL;
+        }
+
+        // si la casilla es válida y coincide la clave, éxito 
+        if (casilla->key != NULL && is_equal(casilla->key, clave)) {
+            mapa->current = indice;  
+            return casilla;
+        }
+
+        // continuar sondeo lineal circular 
+        indice = (indice + 1) % mapa->capacity;
+
+        // resguardo por si acaso
+        if (indice == inicio) return NULL;
+    }
 }
+
 
 Pair * firstMap(HashMap * map) {
 
