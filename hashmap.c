@@ -112,7 +112,7 @@ void eraseMap(HashMap * mapa, char * clave) {
 
         if (casilla->key != NULL && is_equal(casilla->key, clave)) {
             // Invalida el par sin borrarlo
-            casilla->key = NULL;     // IMPORTANTE: no liberar Pair ni value
+            casilla->key = NULL;     
             mapa->size--;            
             mapa->current = indice;  
             return;
@@ -134,17 +134,17 @@ Pair * searchMap(HashMap * mapa, char * clave) {
         Pair *casilla = mapa->buckets[indice];
 
         if (casilla == NULL) {
-            // al encontrar NULL sabemos que la clave no está (corta la búsqueda) 
+            // al encontrar NULL sabemos que la clave no esta y se corta
             return NULL;
         }
 
-        // si la casilla es válida y coincide la clave, éxito 
+    
         if (casilla->key != NULL && is_equal(casilla->key, clave)) {
             mapa->current = indice;  
             return casilla;
         }
 
-        // continuar sondeo lineal circular 
+        
         indice = (indice + 1) % mapa->capacity;
 
         // resguardo por si acaso
@@ -153,12 +153,24 @@ Pair * searchMap(HashMap * mapa, char * clave) {
 }
 
 
-Pair * firstMap(HashMap * map) {
+Pair * firstMap(HashMap * mapa) {
+    if (mapa == NULL || mapa->buckets == NULL) return NULL;
 
+    // Busca el primer par valido desde el indice 0
+    for (long i = 0; i < mapa->capacity; i++) {
+        Pair *casilla = mapa->buckets[i];
+        if (casilla != NULL && casilla->key != NULL) {
+            mapa->current = i; 
+            return casilla;
+        }
+    }
+
+    // No hay pares validos
+    mapa->current = -1;
     return NULL;
 }
 
-Pair * nextMap(HashMap * map) {
+Pair * nextMap(HashMap * mapa) {
 
-    return NULL;
 }
+
