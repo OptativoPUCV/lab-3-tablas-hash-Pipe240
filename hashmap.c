@@ -171,6 +171,19 @@ Pair * firstMap(HashMap * mapa) {
 }
 
 Pair * nextMap(HashMap * mapa) {
+    if (mapa == NULL || mapa->buckets == NULL) return NULL;
+    if (mapa->current < 0 || mapa->current >= mapa->capacity) return NULL;
 
+    
+    for (long i = mapa->current + 1; i < mapa->capacity; i++) {
+        Pair *casilla = mapa->buckets[i];
+        if (casilla != NULL && casilla->key != NULL) {
+            mapa->current = i; // actualiza al encontrado
+            return casilla;
+        }
+    }
+
+    // No hay mas elementos hacia adelante
+    return NULL;
 }
 
