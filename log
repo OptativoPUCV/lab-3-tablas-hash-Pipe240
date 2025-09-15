@@ -45,3 +45,13 @@ Sun, Sep 14, 2025  9:14:53 PM:
  tests:  16|1
 total_score: 60/70
 35f1717
+Sun, Sep 14, 2025  9:15:12 PM: 
+ hashmap.c | 15 ---------------
+ 1 file changed, 15 deletions(-)
+Compilation failed
+C:\Users\felip\AppData\Local\Temp\ccsW25ur.o: In function `next_test':
+C:\Users\felip\OneDrive\Escritorio\lab3\lab-3-tablas-hash-Pipe240/test.c:394: undefined reference to `nextMap'
+C:\Users\felip\OneDrive\Escritorio\lab3\lab-3-tablas-hash-Pipe240/test.c:407: undefined reference to `nextMap'
+C:\Users\felip\OneDrive\Escritorio\lab3\lab-3-tablas-hash-Pipe240/test.c:416: undefined reference to `nextMap'
+collect2.exe: error: ld returned 1 exit status
+0540bb6
