@@ -96,9 +96,32 @@ HashMap * createMap(long capacidad) {
 }
 
 
-void eraseMap(HashMap * map,  char * key) {    
+void eraseMap(HashMap * mapa, char * clave) {
+    if (mapa == NULL || clave == NULL) return;
 
+    long indice = hash(clave, mapa->capacity);
+    long inicio = indice;
 
+    while (1) {
+        Pair *casilla = mapa->buckets[indice];
+
+        if (casilla == NULL) {
+            // Al encontrar NULL, sabemos que la clave no esta
+            return;
+        }
+
+        if (casilla->key != NULL && is_equal(casilla->key, clave)) {
+            // Invalida el par sin borrarlo
+            casilla->key = NULL;     // IMPORTANTE: no liberar Pair ni value
+            mapa->size--;            
+            mapa->current = indice;  
+            return;
+        }
+
+        // Sondeo lineal circular
+        indice = (indice + 1) % mapa->capacity;
+        if (indice == inicio) return; // Resguardo por si acaso
+    }
 }
 
 Pair * searchMap(HashMap * mapa, char * clave) {
